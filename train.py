@@ -208,7 +208,7 @@ def Init_weights(self):
     for m in self.modules():
         if isinstance(m, nn.Conv2d):
             n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
-            m.weight.data.normal_(0, math.sqrt(2. / n))  # if it is convolution layer  for Relu actionvation 
+            m.weight.data.normal_(0, math.sqrt(2. / n))  # if it is convolution layer  for Relu activation 
             if m.bias is not None:            # applying "He initializaiton"
                 m.bias.data.zero_()            # and set bias to 0 
         elif isinstance(m, nn.BatchNorm2d):         # set BN layer to w=1,b=0
@@ -225,7 +225,7 @@ def Init_weights(self):
 # model 
 class LetterCNN(nn.Module):
     def __init__(self):
-        super(LetterCNN,self).__init__()
+        super(LetterCNN,self).__init__()  # super().__init__()
         self.conv1 = nn.Sequential(
             nn.Conv2d( 
                 in_channels=1, # only 1 channel
