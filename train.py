@@ -67,18 +67,18 @@ def centralize_image(fg,debug=True):   # centralize data
     nz_r,nz_c = fg.nonzero() #return non zeros r= row c = colunm
     n_r,n_c = fg.shape
     l,r = max(0,min(nz_c)-1),min(n_c-1,max(nz_c)+1)+1 # left and right boundary for characters
-    t,b = max(0,min(nz_r)-1),min(n_r-1,max(nz_r)+1)+1 #  top and buttom
+    t,b = max(0,min(nz_r)-1),min(n_r-1,max(nz_r)+1)+1 #  top and bottom
 
     # extract window
     win = fg[t:b,l:r]
 
     # resize so largest dim is 48 pixels 
     max_dim = max(win.shape)
-    new_r = int(round(win.shape[0]/max_dim*48))
+    new_r = int(round(win.shape[0]/max_dim*48))  # for example: 68*72--> 46*48
     new_c = int(round(win.shape[1]/max_dim*48))
 
-    win_img = Image.fromarray(win.astype(np.uint8)*255) #
-    resize_img = win_img.resize((new_c,new_r))
+    win_img = Image.fromarray(win.astype(np.uint8)*255) #transfer from np.arary to image format
+    resize_img = win_img.resize((new_c,new_r)) # use PIL.Image to resize
     resize_win = np.array(resize_img).astype(bool)
 
     # embed into output array with 1 pixel border
@@ -179,7 +179,7 @@ class EarlyStopping:
         self.delta = delta
 
     def __call__(self, val_loss, model):
-
+	
         score = -val_loss
 
         if self.best_score is None:
