@@ -203,23 +203,6 @@ class EarlyStopping:
         self.val_loss_min = val_loss
 
 
-# Initialize weights and bias
-def Init_weights(self):
-    for m in self.modules():
-        if isinstance(m, nn.Conv2d):
-            n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
-            m.weight.data.normal_(0, math.sqrt(2. / n))  # if it is convolution layer  for Relu activation 
-            if m.bias is not None:            # applying "He initializaiton"
-                m.bias.data.zero_()            # and set bias to 0 
-        elif isinstance(m, nn.BatchNorm2d):         # set BN layer to w=1,b=0
-            m.weight.data.fill_(1)
-            m.bias.data.zero_()
-        elif isinstance(m, nn.Linear):     # set full connected layer to b=0, w belongs to nomal distibution 
-            m.weight.data.normal_(0, 0.01)
-            m.bias.data.zero_()
-        elif isinstance(m, nn.BatchNorm1d):     # set BN layer to w=1,b=0
-            m.weight.data.fill_(1)
-            m.bias.data.zero_()
 
 
 # model 
@@ -272,6 +255,25 @@ class LetterCNN(nn.Module):
       # x = F.relu(x)
         x = self.fc2(x)       # 
         return  x  # return x     this is unormalizaed x
+
+       # Initialize weights and bias
+    def Init_weights(self):
+    	for m in self.modules():
+	    if isinstance(m, nn.Conv2d):
+	        n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
+	    	m.weight.data.normal_(0, math.sqrt(2. / n))  # if it is convolution layer  for Relu activation 
+	    if m.bias is not None:            # applying "He initializaiton"
+		m.bias.data.zero_()            # and set bias to 0 
+	    elif isinstance(m, nn.BatchNorm2d):         # set BN layer to w=1,b=0
+		m.weight.data.fill_(1)
+		m.bias.data.zero_()
+	    elif isinstance(m, nn.Linear):     # set full connected layer to b=0, w belongs to nomal distibution 
+		m.weight.data.normal_(0, 0.01)
+		m.bias.data.zero_()
+	    elif isinstance(m, nn.BatchNorm1d):     # set BN layer to w=1,b=0
+		m.weight.data.fill_(1)
+		m.bias.data.zero_()
+  
 
 
 def train_validate(learningRate,patience,momentum=0.5):
